@@ -1,13 +1,12 @@
 package de.wulkanat
 
+import de.wulkanat.cli.Cli
 import de.wulkanat.cli.discordUsageEmbed
 import de.wulkanat.cli.makeCli
 import de.wulkanat.discordui.ReactionsMessage
 import de.wulkanat.extensions.hasMember
-import net.dv8tion.jda.api.entities.Member
-import net.dv8tion.jda.api.entities.MessageReaction
-import net.dv8tion.jda.api.entities.User
-import net.dv8tion.jda.api.entities.VoiceChannel
+import de.wulkanat.extensions.queueSelfDestruct
+import net.dv8tion.jda.api.entities.*
 import net.dv8tion.jda.api.events.guild.voice.GuildVoiceJoinEvent
 import net.dv8tion.jda.api.events.guild.voice.GuildVoiceLeaveEvent
 import net.dv8tion.jda.api.events.guild.voice.GuildVoiceMoveEvent
@@ -17,13 +16,14 @@ import net.dv8tion.jda.api.events.message.guild.react.GenericGuildMessageReactio
 import net.dv8tion.jda.api.events.message.guild.react.GuildMessageReactionAddEvent
 import net.dv8tion.jda.api.events.message.guild.react.GuildMessageReactionRemoveEvent
 import net.dv8tion.jda.api.hooks.ListenerAdapter
+import java.util.concurrent.TimeUnit
 
 class CliAdapter : ListenerAdapter() {
     private val messageIdToGame = mutableMapOf<Long, ReactionsMessage>()
     private val colorMessageIdToGame = mutableMapOf<Long, ReactionsMessage>()
     private val channelIdToGame = mutableMapOf<Long, ReactionsMessage>()
 
-    val cli = makeCli<MessageReceivedEvent>(prefix = "!") {
+    private val cli: Cli<MessageReceivedEvent> = makeCli(prefix = "!") {
         command name "asnew" with { required string "Game Code" } does "Create a new game" through
                 { required, _, event -> newGame(event, required.first()) }
         command name "undeafen" does "Undeafen/Unmute yourself if the Among Us Bot was stupid" through
@@ -48,7 +48,6 @@ class CliAdapter : ListenerAdapter() {
         messageIdToGame[reactionsMessage.controlMessage.idLong] = reactionsMessage
         colorMessageIdToGame[reactionsMessage.colorsMessage.idLong] = reactionsMessage
         channelIdToGame[channel.idLong] = reactionsMessage
-        // Main.jda.presence.setPresence(Activity.playing("${messageIdToGame.size}x Among Us"), false)
     }
 
     private fun undeafen(event: MessageReceivedEvent) {
@@ -59,15 +58,17 @@ class CliAdapter : ListenerAdapter() {
     }
 
     override fun onMessageReceived(event: MessageReceivedEvent) {
-        if (event.message.author.isBot) return
+        if (event.message.author.isBot || event.channelType == ChannelType.PRIVATE) return
         val msg = event.message.contentRaw
 
         cli.parse(msg, event,
             commandMisuse = { command, message ->
-                event.message.channel.sendMessage(command.discordUsageEmbed(message)).queue()
+                event.message.channel.sendMessage(command.discordUsageEmbed(message)).queueSelfDestruct(10)
+                event.message.delete().queue()
             },
             helpMessage = {
-                event.message.channel.sendMessage(it.discordUsageEmbed()).queue()
+                event.message.channel.sendMessage(it.discordUsageEmbed()).queueSelfDestruct(10)
+                event.message.delete().queue()
             }
         )
     }

@@ -1,5 +1,6 @@
 package de.wulkanat.discordui
 
+import de.wulkanat.extensions.embed
 import net.dv8tion.jda.api.EmbedBuilder
 import net.dv8tion.jda.api.JDA
 import net.dv8tion.jda.api.entities.Emote
@@ -42,14 +43,9 @@ enum class ColorEmoji(
 
     companion object {
         fun generateOverviewEmbed(): MessageEmbed {
-            return EmbedBuilder().apply {
-                setTitle("Choose your color")
-                // setFooter("Not all colors are super accurate.")
-
-                /*for (value in values()) {
-                    addField(value.amongUsName, value.stringRepresentation(), true)
-                }*/
-            }.build()
+            return embed {
+                title = "Choose your color"
+            }
         }
 
         fun initCustomEmotes(jda: JDA) {

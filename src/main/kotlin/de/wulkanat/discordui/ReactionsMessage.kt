@@ -1,7 +1,6 @@
 package de.wulkanat.discordui
 
 import de.wulkanat.extensions.*
-import net.dv8tion.jda.api.EmbedBuilder
 import net.dv8tion.jda.api.entities.*
 
 class ReactionsMessage(
@@ -19,7 +18,7 @@ class ReactionsMessage(
     @Suppress("JoinDeclarationAndAssignment")
     val colorsMessage: Message
 
-    var ongoingMeeting: Boolean = true
+    private var ongoingMeeting: Boolean = true
 
     init {
         colorsMessage = textChannel.sendMessage(ColorEmoji.generateOverviewEmbed()).complete()
@@ -121,8 +120,10 @@ class ReactionsMessage(
         }
     }
 
-    fun removePlayer(member: Member) {
-        members.remove(member.idLong)
+    fun removePlayer(user: Member) {
+        val member = members[user.idLong] ?: return
+        colorsMessage.reAddColor(member.color)
+        members.remove(user.idLong)
     }
 
     private fun editPlayer(user: Member, status: AmongUsStatus) {
@@ -184,19 +185,19 @@ class ReactionsMessage(
     }
 
     private fun generateMessageEmbed(): MessageEmbed {
-        return EmbedBuilder().apply {
-            setTitle("Game Code: **${gameCode.toUpperCase()}**")
-            setAuthor(
-                "Among Us",
-                "http://www.innersloth.com/gameAmongUs.php",
-                "https://img.itch.zone/aW1nLzE3MzAzNDAucG5n/180x143%23c/dzoZ2W.png"
-            )
-            setFooter("${Emoji.SPEAKER.unicodeEmote} ${channel.name}")
+        return embed {
+            title = "Game Code: **${gameCode.toUpperCase()}**"
+            author {
+                name = "Among Us"
+                url = "http://www.innersloth.com/gameAmongUs.php"
+                iconUrl = "https://img.itch.zone/aW1nLzE3MzAzNDAucG5n/180x143%23c/dzoZ2W.png"
+            }
+            footer = "${Emoji.SPEAKER.unicodeEmote} ${channel.name}"
 
-            setDescription(members.entries.joinToString("\n") {
+            description = members.entries.joinToString("\n") {
                 val (name, color) = it.value.toStringPair()
                 "$color${it.value.status.associatedEmote} $name"
-            })
-        }.build()
+            }
+        }
     }
 }

@@ -2,6 +2,7 @@ package de.wulkanat
 
 import de.wulkanat.discordui.ColorEmoji
 import de.wulkanat.discordui.Emoji
+import de.wulkanat.extensions.embed
 import de.wulkanat.files.Config
 import net.dv8tion.jda.api.EmbedBuilder
 import net.dv8tion.jda.api.JDA
@@ -27,48 +28,48 @@ object Admin {
 
     fun println(msg: String) {
         sendDevMessage(
-            EmbedBuilder()
-                .setTitle(msg)
-                .setColor(Color.WHITE)
-                .build(),
-            msg
+            embed {
+                title = msg
+                color = Color.WHITE
+            }, msg
         )
     }
 
     fun printlnBlocking(msg: String) {
         senDevMessageBlocking(
-            EmbedBuilder()
-                .setTitle(msg)
-                .setColor(Color.WHITE)
-                .build(),
-            msg
+            embed {
+                title = msg
+                color = Color.WHITE
+            }, msg
         )
     }
 
     fun error(msg: String, error: String, author: User? = null) {
         sendDevMessage(
-            EmbedBuilder()
-                .setTitle(msg)
-                .setDescription(error)
-                .setColor(Color.RED)
-                .run {
-                    if (author == null) {
-                        this
-                    } else {
-                        this.setAuthor(author.asTag, author.avatarUrl, author.avatarUrl)
+            embed {
+                title = msg
+                description = error
+                color = Color.RED
+
+                if (author != null) {
+                    author {
+                        name = author.asTag
+                        url = author.avatarUrl
+                        iconUrl = author.avatarUrl
                     }
                 }
-                .build(), "$msg\n\n${error}"
+
+            }, "$msg\n\n${error}"
         )
     }
 
     fun errorBlocking(msg: String, error: Exception) {
         senDevMessageBlocking(
-            EmbedBuilder()
-                .setTitle(msg)
-                .setDescription(error.message)
-                .setColor(Color.RED)
-                .build(), "$msg\n\n${error.message}"
+            embed {
+                title = msg
+                description = error.message
+                color = Color.RED
+            }, "$msg\n\n${error.message}"
         )
     }
 
@@ -84,20 +85,36 @@ object Admin {
 
     fun info() {
         sendDevMessage(
-            EmbedBuilder()
-                .setTitle("Watching games")
-                .also {
+            embed {
+                title = "Watching games"
+                color = Color.GREEN
+
+                fields {
                     for (emote in Emoji.values()) {
-                        it.addField(emote.unicodeEmote, emote.purpose, false)
+                        field {
+                            title = emote.unicodeEmote
+                            description = emote.purpose
+                        }
                     }
 
                     for (emote in ColorEmoji.values()) {
-                        it.addField(emote.amongUsName, emote.stringRepresentation(), true)
+                        field {
+                            title = emote.amongUsName
+                            description = emote.stringRepresentation()
+                            inline = true
+                        }
                     }
                 }
-                .setColor(Color.GREEN)
-                .build(),
-            "Wow, such empty."
+            }, "Wow, such empty."
+        )
+    }
+
+    fun servers() {
+        sendDevMessage(
+            embed {
+                title = "Joined Servers"
+                description = jda?.guilds?.joinToString("\n") { "${it.name} (${it.memberCount} Members)" }
+            }, "Joined ${jda?.guilds?.size} servers"
         )
     }
 
@@ -116,7 +133,7 @@ object Admin {
             .sendMessage(messageEmbed).complete()
     }
 
-    fun sendDevMessage(messageEmbed: MessageEmbed, fallback: String) {
+    private fun sendDevMessage(messageEmbed: MessageEmbed, fallback: String) {
         val devChannel = admin?.openPrivateChannel() ?: kotlin.run {
             kotlin.io.println(fallback)
             return

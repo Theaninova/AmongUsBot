@@ -11,6 +11,7 @@ import net.dv8tion.jda.internal.requests.Method
 import net.dv8tion.jda.internal.requests.Route
 import net.dv8tion.jda.internal.requests.restaction.MessageActionImpl
 import net.dv8tion.jda.internal.utils.Checks
+import java.util.concurrent.TimeUnit
 
 fun MessageChannel.crosspostById(messageId: String): MessageAction {
     Checks.isSnowflake(messageId, "Message ID")
@@ -52,6 +53,10 @@ fun Message.clearReactions(color: ColorEmoji): RestAction<Void> {
     } else {
         clearReactions(color.unicode)
     }
+}
+
+fun MessageAction.queueSelfDestruct(seconds: Long) {
+    queue { it.delete().queueAfter(seconds, TimeUnit.SECONDS) }
 }
 
 fun Message.addControlReactions(deafened: Boolean): Message {

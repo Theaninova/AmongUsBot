@@ -8,10 +8,10 @@ Invite him [here](https://discord.com/api/oauth2/authorize?client_id=75919495527
 
 | **Command**      | **Arguments**                                          | **Info**                                                                                          |
 |------------------|--------------------------------------------------------|--------------------|
-| %!asnew            |    [Game Code]  | Create a new game (has to be in Voice channel  |
-| %!unmute         |        | Unmute/Undeafen yourself if the bot didn't do that automatically   |
-| %!undeafen        |     | Unmute/Undeafen yourself if the bot didn't do that automatically    |
-| %!help           |    | Show a help dialog with all these commands                                                        |
+| !asnew            |    [Game Code]  | Create a new game (has to be in Voice channel  |
+| !unmute         |        | Unmute/Undeafen yourself if the bot didn't do that automatically   |
+| !undeafen        |     | Unmute/Undeafen yourself if the bot didn't do that automatically    |
+| !help           |    | Show a help dialog with all these commands                                                        |
 
 ## Preview
 
@@ -43,24 +43,32 @@ however they do not cover the full spectrum of colors used by Among Us.
 
 The bot will look for emojis named `amongus_[color]`, I recommend using [these](https://among-us.fandom.com/wiki/Category:Colors).
 
-<img src="https://vignette.wikia.nocookie.net/among-us-wiki/images/a/a6/1_red.png/revision/latest/scale-to-width-down/140?cb=20200912125145" width="32"/>
-<img src="https://vignette.wikia.nocookie.net/among-us-wiki/images/8/8e/2_blue.png/revision/latest/scale-to-width-down/140?cb=20200912125155" width="32"/>
-<img src="https://vignette.wikia.nocookie.net/among-us-wiki/images/3/34/3_green.png/revision/latest/scale-to-width-down/140?cb=20200912125201" width="32"/>
-<img src="https://vignette.wikia.nocookie.net/among-us-wiki/images/9/9b/4_pink.png/revision/latest/scale-to-width-down/140?cb=20200912125206" width="32"/>
-<img src="https://vignette.wikia.nocookie.net/among-us-wiki/images/f/f1/5_orange.png/revision/latest/scale-to-width-down/140?cb=20200912125212" width="32"/>
-<img src="https://vignette.wikia.nocookie.net/among-us-wiki/images/5/54/6_yellow.png/revision/latest/scale-to-width-down/140?cb=20200912125217" width="32"/>
-<img src="https://vignette.wikia.nocookie.net/among-us-wiki/images/5/55/7_black.png/revision/latest/scale-to-width-down/140?cb=20200912125223" width="32"/>
-<img src="https://vignette.wikia.nocookie.net/among-us-wiki/images/e/e1/8_white.png/revision/latest/scale-to-width-down/140?cb=20200912125229" width="32"/>
-<img src="https://vignette.wikia.nocookie.net/among-us-wiki/images/7/72/9_purple.png/revision/latest/scale-to-width-down/140?cb=20200912125234" width="32"/>
-<img src="https://vignette.wikia.nocookie.net/among-us-wiki/images/b/b2/10_brown.png/revision/latest/scale-to-width-down/140?cb=20200912125240" width="32"/>
-<img src="https://vignette.wikia.nocookie.net/among-us-wiki/images/f/f2/11_cyan.png/revision/latest/scale-to-width-down/140?cb=20200912125246" width="32"/>
-<img src="https://vignette.wikia.nocookie.net/among-us-wiki/images/f/fd/12_lime.png/revision/latest/scale-to-width-down/140?cb=20200912125258" width="32"/>
-<img src="https://vignette.wikia.nocookie.net/among-us-wiki/images/8/87/Tan.png/revision/latest?cb=20200921181340" width="32"/>
-<img src="https://vignette.wikia.nocookie.net/among-us-wiki/images/1/1a/Player_fortegreen.png/revision/latest?cb=20200917134119" width="32"/>
+<p align="left">
+    <img src="https://vignette.wikia.nocookie.net/among-us-wiki/images/a/a6/1_red.png/revision/latest/scale-to-width-down/140?cb=20200912125145" width="32"/>
+    <img src="https://vignette.wikia.nocookie.net/among-us-wiki/images/8/8e/2_blue.png/revision/latest/scale-to-width-down/140?cb=20200912125155" width="32"/>
+    <img src="https://vignette.wikia.nocookie.net/among-us-wiki/images/3/34/3_green.png/revision/latest/scale-to-width-down/140?cb=20200912125201" width="32"/>
+    <img src="https://vignette.wikia.nocookie.net/among-us-wiki/images/9/9b/4_pink.png/revision/latest/scale-to-width-down/140?cb=20200912125206" width="32"/>
+    <img src="https://vignette.wikia.nocookie.net/among-us-wiki/images/f/f1/5_orange.png/revision/latest/scale-to-width-down/140?cb=20200912125212" width="32"/>
+    <img src="https://vignette.wikia.nocookie.net/among-us-wiki/images/5/54/6_yellow.png/revision/latest/scale-to-width-down/140?cb=20200912125217" width="32"/>
+    <img src="https://vignette.wikia.nocookie.net/among-us-wiki/images/5/55/7_black.png/revision/latest/scale-to-width-down/140?cb=20200912125223" width="32"/>
+    <img src="https://vignette.wikia.nocookie.net/among-us-wiki/images/e/e1/8_white.png/revision/latest/scale-to-width-down/140?cb=20200912125229" width="32"/>
+    <img src="https://vignette.wikia.nocookie.net/among-us-wiki/images/7/72/9_purple.png/revision/latest/scale-to-width-down/140?cb=20200912125234" width="32"/>
+    <img src="https://vignette.wikia.nocookie.net/among-us-wiki/images/b/b2/10_brown.png/revision/latest/scale-to-width-down/140?cb=20200912125240" width="32"/>
+    <img src="https://vignette.wikia.nocookie.net/among-us-wiki/images/f/f2/11_cyan.png/revision/latest/scale-to-width-down/140?cb=20200912125246" width="32"/>
+    <img src="https://vignette.wikia.nocookie.net/among-us-wiki/images/f/fd/12_lime.png/revision/latest/scale-to-width-down/140?cb=20200912125258" width="32"/>
+    <img src="https://vignette.wikia.nocookie.net/among-us-wiki/images/8/87/Tan.png/revision/latest?cb=20200921181340" width="32"/>
+    <img src="https://vignette.wikia.nocookie.net/among-us-wiki/images/1/1a/Player_fortegreen.png/revision/latest?cb=20200917134119" width="32"/>
+</p>
 
 ## Compiling yourself
 I developed it under Windows, and had some trouble compiling it on Linux. You mileage may vary.
 
 ## Admin commands
 
-TODO;
+| **Command**      | **Arguments**                                          | **Info**                                                                                          |
+|------------------|--------------------------------------------------------|--------------------|
+| !info            |     | Info about the bot's status  |
+| !servers         |        | List of servers the bot joined   |
+| !stop        |     | Stop the bot |
+| !help           |    | Show a help dialog with all these commands                                                        |
+
