@@ -19,7 +19,6 @@ object Main {
 
 fun main() {
     ColorEmoji.initCustomEmotes(Main.jda)
-    // initEmotes(Main.jda)
     Admin.jda = Main.jda
     Admin.info()
 }

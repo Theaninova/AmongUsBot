@@ -83,7 +83,6 @@ object Admin {
     }
 
     fun info() {
-        // TODO
         sendDevMessage(
             EmbedBuilder()
                 .setTitle("Watching games")

@@ -1,11 +1,8 @@
 package de.wulkanat.discordui
 
-import de.wulkanat.extensions.queueAllSafe
-import de.wulkanat.extensions.queueSafe
+import de.wulkanat.extensions.*
 import net.dv8tion.jda.api.EmbedBuilder
 import net.dv8tion.jda.api.entities.*
-import net.dv8tion.jda.api.requests.RestAction
-import sun.plugin2.util.ColorUtil
 
 class ReactionsMessage(
     val channel: VoiceChannel,
@@ -22,6 +19,8 @@ class ReactionsMessage(
     @Suppress("JoinDeclarationAndAssignment")
     val colorsMessage: Message
 
+    var ongoingMeeting: Boolean = true
+
     init {
         colorsMessage = textChannel.sendMessage(ColorEmoji.generateOverviewEmbed()).complete()
         controlMessage = textChannel.sendMessage(generateMessageEmbed()).complete().addControlReactions(false)
@@ -30,18 +29,20 @@ class ReactionsMessage(
 
     class AmongUsPlayer(val member: Member, val status: AmongUsStatus, val color: ColorEmoji) {
         fun toStringPair(): Pair<String, String> {
-            return Pair(member.effectiveName, "${color.stringRepresentation()} ${status.displayName}".trim())
+            return Pair(member.effectiveName, color.stringRepresentation())
         }
     }
 
-    enum class AmongUsStatus(val alive: Boolean, val displayName: String) {
-        ALIVE(true, "Alive"),
-        DEAD(false, "Dead"),
-        SPECTATOR(false, "Spectator")
+    enum class AmongUsStatus(val alive: Boolean, val displayName: String, val associatedEmote: String) {
+        ALIVE(true, "Alive", ""),
+        DEAD(false, "Dead", Emoji.SKULL.unicodeEmote),
+        SPECTATOR(false, "Spectator", Emoji.OBSERVER.unicodeEmote)
     }
 
 
     fun deafenAll() {
+        ongoingMeeting = false
+
         for (member in channel.members) {
             when (members[member.idLong]?.status?.alive) {
                 true -> if (member.voiceState?.isDeafened == false) {
@@ -56,6 +57,8 @@ class ReactionsMessage(
     }
 
     fun unmuteAll() {
+        ongoingMeeting = true
+
         for (member in channel.members) {
             when (members[member.idLong]?.status?.alive) {
                 true -> {
@@ -125,29 +128,10 @@ class ReactionsMessage(
     private fun editPlayer(user: Member, status: AmongUsStatus) {
         val member = members[user.idLong] ?: return
         members[user.idLong] = AmongUsPlayer(member.member, status, member.color)
-    }
-
-    private fun Message.reAddColor(color: ColorEmoji) {
-        clearReactions(ColorEmoji.NONE).queue {
-            addReaction(color).queue {
-                addReaction(ColorEmoji.NONE).queue()
-            }
-        }
-    }
-
-    private fun Message.addReaction(color: ColorEmoji): RestAction<Void> {
-        return if (color.customEmoji != null) {
-            addReaction(color.customEmoji!!)
+        if (ongoingMeeting) {
+            unmuteAll()
         } else {
-            addReaction(color.unicode)
-        }
-    }
-
-    private fun Message.clearReactions(color: ColorEmoji): RestAction<Void> {
-        return if (color.customEmoji != null) {
-            clearReactions(color.customEmoji!!)
-        } else {
-            clearReactions(color.unicode)
+            deafenAll()
         }
     }
 
@@ -187,54 +171,16 @@ class ReactionsMessage(
     }
 
     private fun reset() {
-        unmuteAll()
-
-        members.clear()
-        updatePlayers()
-
-        updateMessage()
-        controlMessage.clearReactions().queue {
-            controlMessage.addControlReactions(false)
-        }
-        colorsMessage.clearReactions().queue {
-            colorsMessage.addColorReactions()
-        }
-    }
-
-    private fun Message.refreshControlReactions(deafened: Boolean): Message {
-        listOf(
-            clearReactions(if (deafened) Emoji.MUTE.unicodeEmote else Emoji.SPEAKER.unicodeEmote),
-            addReaction(if (deafened) Emoji.SPEAKER.unicodeEmote else Emoji.MUTE.unicodeEmote),
-        ).queueAllSafe()
-
-        return this
-    }
-
-    private fun Message.addControlReactions(deafened: Boolean): Message {
-        listOf(
-            addReaction(Emoji.STOP_BUTTON.unicodeEmote),
-            addReaction(Emoji.REPEAT.unicodeEmote),
-            addReaction(Emoji.OBSERVER.unicodeEmote),
-            addReaction(Emoji.SKULL.unicodeEmote),
-            clearReactions(if (deafened) Emoji.MUTE.unicodeEmote else Emoji.SPEAKER.unicodeEmote),
-            addReaction(if (deafened) Emoji.SPEAKER.unicodeEmote else Emoji.MUTE.unicodeEmote)
-        ).queueAllSafe()
-
-        return this
-    }
-
-    private fun Message.addColorReactions(): Message {
-        val list = mutableListOf<RestAction<Void>>()
-        for (value in ColorEmoji.values()) {
-            if (value.customEmoji == null) {
-                list.add(addReaction(value.unicode))
-            } else {
-                list.add(addReaction(value.customEmoji!!))
+        for ((key, value) in members) {
+            if (value.status == AmongUsStatus.DEAD) {
+                members[key] = AmongUsPlayer(value.member, AmongUsStatus.ALIVE, value.color)
             }
         }
-        list.queueAllSafe()
 
-        return this
+        unmuteAll()
+
+        updateMessage()
+        controlMessage.regenerateDeadMute(false)
     }
 
     private fun generateMessageEmbed(): MessageEmbed {
@@ -247,10 +193,10 @@ class ReactionsMessage(
             )
             setFooter("${Emoji.SPEAKER.unicodeEmote} ${channel.name}")
 
-            for (member in members) {
-                val (title, field) = member.value.toStringPair()
-                addField(title, field, true)
-            }
+            setDescription(members.entries.joinToString("\n") {
+                val (name, color) = it.value.toStringPair()
+                "$color${it.value.status.associatedEmote} $name"
+            })
         }.build()
     }
 }
