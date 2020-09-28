@@ -1,6 +1,11 @@
 # Among Us Bot
 
-Automatically manages deafening members and provides a very intuitive interface
+Provides a very intuitive interface to keep track of colors and dead people.
+As a bonus it can deafen lazy people. Caveat: Discord rate limits bots, it can roughly mute
+two people per second. Use this as a last resort, not as a default.
+
+The bot reacts automatically when someone deafens themselves, waits 5 seconds and deafens
+anyone who is not deafened yet (except dead/spectator people).
 
 Invite him [here](https://discord.com/api/oauth2/authorize?client_id=759194955272552468&permissions=29715520&scope=bot)
 
@@ -8,10 +13,11 @@ Invite him [here](https://discord.com/api/oauth2/authorize?client_id=75919495527
 
 | **Command**      | **Arguments**                                          | **Info**                                                                                          |
 |------------------|--------------------------------------------------------|--------------------|
-| !asnew            |    [Game Code]  | Create a new game (has to be in Voice channel  |
+| !asnew            |    [Game Code]  | Create a new game (has to be in Voice channel)  |
 | !unmute         |        | Unmute/Undeafen yourself if the bot didn't do that automatically   |
 | !undeafen        |     | Unmute/Undeafen yourself if the bot didn't do that automatically    |
 | !help           |    | Show a help dialog with all these commands                                                        |
+| <code>([A-z]&#124;\d){5}</code> |     |  Create a new game (has to be in Voice channel). Does not mute anyone.  |
 
 ## Preview
 
@@ -60,10 +66,10 @@ The bot will look for emojis named `amongus_[color]`, I recommend using [these](
     <img src="https://vignette.wikia.nocookie.net/among-us-wiki/images/1/1a/Player_fortegreen.png/revision/latest?cb=20200917134119" width="32"/>
 </p>
 
-## Compiling yourself
+### Compiling yourself
 I developed it under Windows, and had some trouble compiling it on Linux. You mileage may vary.
 
-## Admin commands
+### Admin commands
 
 | **Command**      | **Arguments**                                          | **Info**                                                                                          |
 |------------------|--------------------------------------------------------|--------------------|
@@ -72,3 +78,15 @@ I developed it under Windows, and had some trouble compiling it on Linux. You mi
 | !stop        |     | Stop the bot |
 | !help           |    | Show a help dialog with all these commands                                                        |
 
+### Config File
+
+```json5
+{
+  // your user ID
+  botAdmin: 12345678,
+  // your discord bot token
+  token: "YourTokenHere",
+  // delay before the bot will deafen all
+  muteDelay: 5000
+}
+```

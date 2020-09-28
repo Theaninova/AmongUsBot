@@ -10,14 +10,18 @@ object Config : SerializableObject<Config.Data>("config.json", Data(), Data.seri
 
     val botAdmin get() = instance.botAdmin
     val token get() = instance.token
+    val muteDelay get() = instance.muteDelay
 
     @Serializable
     data class Data(
         val botAdmin: Long = 1234,
         val token: String = "ABCDE",
+        val muteDelay: Long = 5000,
     ) : AutoSaveSerializable {
-        @Transient override var parent: AutoSaveSerializable? = null
+        @Transient
+        override var parent: AutoSaveSerializable? = null
 
-        override fun propagateParent() { /* noop */ }
+        override fun propagateParent() { /* noop */
+        }
     }
 }

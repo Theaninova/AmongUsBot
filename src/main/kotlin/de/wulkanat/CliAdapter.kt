@@ -16,7 +16,6 @@ import net.dv8tion.jda.api.events.message.guild.react.GenericGuildMessageReactio
 import net.dv8tion.jda.api.events.message.guild.react.GuildMessageReactionAddEvent
 import net.dv8tion.jda.api.events.message.guild.react.GuildMessageReactionRemoveEvent
 import net.dv8tion.jda.api.hooks.ListenerAdapter
-import java.util.concurrent.TimeUnit
 
 class CliAdapter : ListenerAdapter() {
     private val messageIdToGame = mutableMapOf<Long, ReactionsMessage>()
@@ -24,15 +23,18 @@ class CliAdapter : ListenerAdapter() {
     private val channelIdToGame = mutableMapOf<Long, ReactionsMessage>()
 
     private val cli: Cli<MessageReceivedEvent> = makeCli(prefix = "!") {
-        command name "asnew" with { required string "Game Code" } does "Create a new game" through
-                { required, _, event -> newGame(event, required.first()) }
+        command name "asnew" with {
+            required string "Game Code"
+            optional existence "noMute"
+        } does "Create a new game" through
+                { required, optional, event -> newGame(event, required.first(), optional["noMute"] == null) }
         command name "undeafen" does "Undeafen/Unmute yourself if the Among Us Bot was stupid" through
                 { _, _, event -> undeafen(event) }
         command name "unmute" does "Undeafen/Unmute yourself if the Among Us Bot was stupid" through
                 { _, _, event -> undeafen(event) }
     }
 
-    private fun newGame(event: MessageReceivedEvent, gameCode: String) {
+    private fun newGame(event: MessageReceivedEvent, gameCode: String, mute: Boolean) {
         val jda = event.jda
         val author = event.member ?: return
 
@@ -42,7 +44,7 @@ class CliAdapter : ListenerAdapter() {
         }
 
         event.message.delete().queue()
-        val reactionsMessage = ReactionsMessage(channel, gameCode, event.message.textChannel)
+        val reactionsMessage = ReactionsMessage(channel, gameCode, event.message.textChannel, mute)
         reactionsMessage.updatePlayers()
         reactionsMessage.updateMessage()
         messageIdToGame[reactionsMessage.controlMessage.idLong] = reactionsMessage
@@ -60,6 +62,12 @@ class CliAdapter : ListenerAdapter() {
     override fun onMessageReceived(event: MessageReceivedEvent) {
         if (event.message.author.isBot || event.channelType == ChannelType.PRIVATE) return
         val msg = event.message.contentRaw
+
+        if (msg.trim() matches "([A-z]|\\d){6}".toRegex() && event.member?.voiceState?.inVoiceChannel() == true) {
+            newGame(event, msg, false)
+
+            return
+        }
 
         cli.parse(msg, event,
             commandMisuse = { command, message ->

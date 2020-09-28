@@ -59,34 +59,44 @@ fun MessageAction.queueSelfDestruct(seconds: Long) {
     queue { it.delete().queueAfter(seconds, TimeUnit.SECONDS) }
 }
 
-fun Message.addControlReactions(deafened: Boolean): Message {
-    listOf(
+fun Message.addControlReactions(deafened: Boolean, mute: Boolean): Message {
+    mutableListOf(
         addReaction(Emoji.STOP_BUTTON.unicodeEmote),
         addReaction(Emoji.OBSERVER.unicodeEmote),
         addReaction(Emoji.REPEAT.unicodeEmote),
         addReaction(Emoji.SKULL.unicodeEmote),
-        clearReactions(if (deafened) Emoji.MUTE.unicodeEmote else Emoji.SPEAKER.unicodeEmote),
-        addReaction(if (deafened) Emoji.SPEAKER.unicodeEmote else Emoji.MUTE.unicodeEmote)
-    ).queueAllSafe()
+    ).alsoIf(mute) {
+        addAll(
+            clearReactions(if (deafened) Emoji.MUTE.unicodeEmote else Emoji.SPEAKER.unicodeEmote),
+            addReaction(if (deafened) Emoji.SPEAKER.unicodeEmote else Emoji.MUTE.unicodeEmote)
+        )
+    }.queueAllSafe()
 
     return this
 }
 
-fun Message.regenerateDeadMute(deafened: Boolean): Message {
-    listOf(
-        clearReactions(Emoji.MUTE.unicodeEmote),
-        clearReactions(Emoji.SPEAKER.unicodeEmote),
+fun Message.regenerateDeadMute(deafened: Boolean, mute: Boolean): Message {
+    mutableListOf(
         clearReactions(Emoji.REPEAT.unicodeEmote),
-        clearReactions(Emoji.SKULL.unicodeEmote),
+        clearReactions(Emoji.SKULL.unicodeEmote)
+    ).alsoIf(mute) {
+        addAll(
+            clearReactions(Emoji.MUTE.unicodeEmote),
+            clearReactions(Emoji.SPEAKER.unicodeEmote),
+        )
+    }.alsoAdd(
         addReaction(Emoji.REPEAT.unicodeEmote),
         addReaction(Emoji.SKULL.unicodeEmote),
-        addReaction(if (deafened) Emoji.SPEAKER.unicodeEmote else Emoji.MUTE.unicodeEmote)
-    ).queueAllSafe()
+    ).alsoIf(mute) {
+        add(addReaction(if (deafened) Emoji.SPEAKER.unicodeEmote else Emoji.MUTE.unicodeEmote))
+    }.queueAllSafe()
 
     return this
 }
 
-fun Message.refreshControlReactions(deafened: Boolean): Message {
+fun Message.refreshControlReactions(deafened: Boolean, mute: Boolean): Message {
+    if (!mute) return this
+
     listOf(
         clearReactions(if (deafened) Emoji.MUTE.unicodeEmote else Emoji.SPEAKER.unicodeEmote),
         addReaction(if (deafened) Emoji.SPEAKER.unicodeEmote else Emoji.MUTE.unicodeEmote),

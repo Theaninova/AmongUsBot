@@ -2,11 +2,13 @@ package de.wulkanat.discordui
 
 import de.wulkanat.extensions.*
 import net.dv8tion.jda.api.entities.*
+import kotlinx.coroutines.*
 
 class ReactionsMessage(
     val channel: VoiceChannel,
     private val gameCode: String,
     textChannel: TextChannel,
+    private val mute: Boolean,
 ) {
     /**
      * userIdLong -> User
@@ -22,7 +24,7 @@ class ReactionsMessage(
 
     init {
         colorsMessage = textChannel.sendMessage(ColorEmoji.generateOverviewEmbed()).complete()
-        controlMessage = textChannel.sendMessage(generateMessageEmbed()).complete().addControlReactions(false)
+        controlMessage = textChannel.sendMessage(generateMessageEmbed()).complete().addControlReactions(false, mute)
         colorsMessage.addColorReactions()
     }
 
@@ -40,38 +42,44 @@ class ReactionsMessage(
 
 
     fun deafenAll() {
+        if (!mute) return
         ongoingMeeting = false
 
-        for (member in channel.members) {
-            when (members[member.idLong]?.status?.alive) {
-                true -> if (member.voiceState?.isDeafened == false) {
-                    member.deafen(true).queue()
-                    member.mute(true).queue()
-                }
-                false -> if (member.voiceState?.isMuted == true) member.mute(false).queue()
-            }
-        }
+        // only deafen people who didn't deafen themselves 5 seconds after the meeting ended
+        GlobalScope.launch {
+            delay(5000L)
+            if (ongoingMeeting) return@launch
 
-        controlMessage.refreshControlReactions(true)
+            for (member in channel.members) {
+                when (members[member.idLong]?.status?.alive) {
+                    true -> if (member.voiceState?.isDeafened == false) {
+                        member.deafen(true).queue()
+                    }
+                    false -> if (member.voiceState?.isMuted == true) member.mute(false).queue()
+                }
+            }
+
+            controlMessage.refreshControlReactions(true, mute)
+        }
     }
 
     fun unmuteAll() {
         ongoingMeeting = true
 
         for (member in channel.members) {
-            when (members[member.idLong]?.status?.alive) {
-                true -> {
-                    if (member.voiceState?.isDeafened == true) member.deafen(false).queue()
-                    if (member.voiceState?.isMuted == true) member.mute(false).queue()
-                }
-                false -> {
-                    if (member.voiceState?.isDeafened == true) member.deafen(false).queue()
-                    if (member.voiceState?.isMuted == false) member.mute(true).queue()
-                }
-            }
+            /*when (members[member.idLong]?.status?.alive) {
+                true -> {*/
+            if (member.voiceState?.isDeafened == true) member.deafen(false).queue()
+            if (member.voiceState?.isMuted == true) member.mute(false).queue()
+            // }
+            /*false -> {
+                if (member.voiceState?.isDeafened == true) member.deafen(false).queue()
+                if (member.voiceState?.isMuted == false) member.mute(true).queue()
+            } disabled because of Discord rate limit */
+            //}
         }
 
-        controlMessage.refreshControlReactions(false)
+        controlMessage.refreshControlReactions(false, mute)
     }
 
     fun deleteMessage() {
@@ -181,7 +189,7 @@ class ReactionsMessage(
         unmuteAll()
 
         updateMessage()
-        controlMessage.regenerateDeadMute(false)
+        controlMessage.regenerateDeadMute(false, mute)
     }
 
     private fun generateMessageEmbed(): MessageEmbed {
@@ -192,7 +200,7 @@ class ReactionsMessage(
                 url = "http://www.innersloth.com/gameAmongUs.php"
                 iconUrl = "https://img.itch.zone/aW1nLzE3MzAzNDAucG5n/180x143%23c/dzoZ2W.png"
             }
-            footer = "${Emoji.SPEAKER.unicodeEmote} ${channel.name}"
+            footer = "${Emoji.SPEAKER.unicodeEmote} ${channel.name} ${if (!mute) "(auto-mute disabled)" else ""}"
 
             description = members.entries.joinToString("\n") {
                 val (name, color) = it.value.toStringPair()
