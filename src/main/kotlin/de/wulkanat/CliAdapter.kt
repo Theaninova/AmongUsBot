@@ -5,6 +5,7 @@ import de.wulkanat.cli.discordUsageEmbed
 import de.wulkanat.cli.makeCli
 import de.wulkanat.discordui.ReactionsMessage
 import de.wulkanat.extensions.hasMember
+import de.wulkanat.extensions.isProbablyHash
 import de.wulkanat.extensions.queueSelfDestruct
 import net.dv8tion.jda.api.entities.*
 import net.dv8tion.jda.api.events.guild.voice.GuildVoiceJoinEvent
@@ -71,7 +72,7 @@ class CliAdapter : ListenerAdapter() {
         if (event.message.author.isBot || event.channelType == ChannelType.PRIVATE) return
         val msg = event.message.contentRaw
 
-        if (msg.trim() matches "([A-z]|\\d){6}".toRegex() && event.member?.voiceState?.inVoiceChannel() == true) {
+        if (msg.isProbablyHash(6) && event.member?.voiceState?.inVoiceChannel() == true) {
             newGame(event, msg, false)
 
             return
