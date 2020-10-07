@@ -15,7 +15,7 @@ Invite him [here](https://discord.com/api/oauth2/authorize?client_id=75919495527
 
 | **Command**      | **Arguments**                                          | **Info**                                                                                          |
 |------------------|--------------------------------------------------------|--------------------|
-| !asnew            |    [Game Code]  | Create a new game (has to be in Voice channel)  |
+| !asnew            |    [Game Code] <--noMute>  | Create a new game (has to be in Voice channel)  |
 | !unmute         |        | Unmute/Undeafen yourself if the bot didn't do that automatically   |
 | !undeafen        |     | Unmute/Undeafen yourself if the bot didn't do that automatically    |
 | !help           |    | Show a help dialog with all these commands                                                        |
