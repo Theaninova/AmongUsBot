@@ -33,9 +33,14 @@ class ReactionsMessage(
         colorsMessage.addColorReactions()
     }
 
-    class AmongUsPlayer(val member: Member, val status: AmongUsStatus, val color: ColorEmoji) {
+    class AmongUsPlayer(val member: Member, val status: AmongUsStatus, val color: ColorEmoji) :
+        Comparable<AmongUsPlayer> {
         fun toStringPair(): Pair<String, String> {
             return Pair(member.effectiveName, color.stringRepresentation())
+        }
+
+        override fun compareTo(other: AmongUsPlayer): Int {
+            return this.member.effectiveName.compareTo(other.member.effectiveName)
         }
     }
 
@@ -207,7 +212,7 @@ class ReactionsMessage(
             }
             footer = "${Emoji.SPEAKER.unicodeEmote} ${channel.name} ${if (!mute) "(auto-mute disabled)" else ""}"
 
-            description = members.entries.joinToString("\n") {
+            description = members.entries.sortedBy { it.value }.joinToString("\n") {
                 val (name, color) = it.value.toStringPair()
                 "$color${it.value.status.associatedEmote} $name"
             }
