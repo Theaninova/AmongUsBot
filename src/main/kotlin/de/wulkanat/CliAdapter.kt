@@ -44,6 +44,14 @@ class CliAdapter : ListenerAdapter() {
         }
 
         event.message.delete().queue()
+
+        // if there is already an ongoing game
+        channelIdToGame[channel.idLong]?.let {
+            it.gameCode = gameCode
+
+            return@newGame
+        }
+
         val reactionsMessage = ReactionsMessage(channel, gameCode, event.message.textChannel, mute)
         reactionsMessage.updatePlayers()
         reactionsMessage.updateMessage()

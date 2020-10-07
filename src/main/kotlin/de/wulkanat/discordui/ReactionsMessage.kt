@@ -6,7 +6,7 @@ import kotlinx.coroutines.*
 
 class ReactionsMessage(
     val channel: VoiceChannel,
-    private val gameCode: String,
+    gameCode: String,
     textChannel: TextChannel,
     private val mute: Boolean,
 ) {
@@ -16,6 +16,11 @@ class ReactionsMessage(
     private val members: MutableMap<Long, AmongUsPlayer> = mutableMapOf()
 
     val controlMessage: Message
+    var gameCode: String = gameCode
+        set(value) {
+            field = value
+            updateMessage()
+        }
 
     @Suppress("JoinDeclarationAndAssignment")
     val colorsMessage: Message
