@@ -7,6 +7,8 @@ two people per second. Use this as a last resort, not as a default.
 The bot reacts automatically when someone deafens themselves, waits 5 seconds and deafens
 anyone who is not deafened yet (except dead/spectator people).
 
+To update the game code, just type a new game code in chat, the message will update automatically.
+
 Invite him [here](https://discord.com/api/oauth2/authorize?client_id=759194955272552468&permissions=29715520&scope=bot)
 
 ## Commands
