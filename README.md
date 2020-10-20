@@ -52,20 +52,20 @@ however they do not cover the full spectrum of colors used by Among Us.
 The bot will look for emojis named `amongus_[color]`, I recommend using [these](https://among-us.fandom.com/wiki/Category:Colors).
 
 <p align="left">
-    <img src="https://vignette.wikia.nocookie.net/among-us-wiki/images/a/a6/1_red.png/revision/latest/scale-to-width-down/140?cb=20200912125145" width="32"/>
-    <img src="https://vignette.wikia.nocookie.net/among-us-wiki/images/8/8e/2_blue.png/revision/latest/scale-to-width-down/140?cb=20200912125155" width="32"/>
-    <img src="https://vignette.wikia.nocookie.net/among-us-wiki/images/3/34/3_green.png/revision/latest/scale-to-width-down/140?cb=20200912125201" width="32"/>
-    <img src="https://vignette.wikia.nocookie.net/among-us-wiki/images/9/9b/4_pink.png/revision/latest/scale-to-width-down/140?cb=20200912125206" width="32"/>
-    <img src="https://vignette.wikia.nocookie.net/among-us-wiki/images/f/f1/5_orange.png/revision/latest/scale-to-width-down/140?cb=20200912125212" width="32"/>
-    <img src="https://vignette.wikia.nocookie.net/among-us-wiki/images/5/54/6_yellow.png/revision/latest/scale-to-width-down/140?cb=20200912125217" width="32"/>
-    <img src="https://vignette.wikia.nocookie.net/among-us-wiki/images/5/55/7_black.png/revision/latest/scale-to-width-down/140?cb=20200912125223" width="32"/>
-    <img src="https://vignette.wikia.nocookie.net/among-us-wiki/images/e/e1/8_white.png/revision/latest/scale-to-width-down/140?cb=20200912125229" width="32"/>
-    <img src="https://vignette.wikia.nocookie.net/among-us-wiki/images/7/72/9_purple.png/revision/latest/scale-to-width-down/140?cb=20200912125234" width="32"/>
-    <img src="https://vignette.wikia.nocookie.net/among-us-wiki/images/b/b2/10_brown.png/revision/latest/scale-to-width-down/140?cb=20200912125240" width="32"/>
-    <img src="https://vignette.wikia.nocookie.net/among-us-wiki/images/f/f2/11_cyan.png/revision/latest/scale-to-width-down/140?cb=20200912125246" width="32"/>
-    <img src="https://vignette.wikia.nocookie.net/among-us-wiki/images/f/fd/12_lime.png/revision/latest/scale-to-width-down/140?cb=20200912125258" width="32"/>
-    <img src="https://vignette.wikia.nocookie.net/among-us-wiki/images/8/87/Tan.png/revision/latest?cb=20200921181340" width="32"/>
-    <img src="https://vignette.wikia.nocookie.net/among-us-wiki/images/1/1a/Player_fortegreen.png/revision/latest?cb=20200917134119" width="32"/>
+    <img src="https://vignette.wikia.nocookie.net/among-us-wiki/images/3/31/Red.png" width="32"/>
+    <img src="https://vignette.wikia.nocookie.net/among-us-wiki/images/1/16/Blue.png" width="32"/>
+    <img src="https://vignette.wikia.nocookie.net/among-us-wiki/images/7/72/Green.png" width="32"/>
+    <img src="https://vignette.wikia.nocookie.net/among-us-wiki/images/5/50/Pink.png" width="32"/>
+    <img src="https://vignette.wikia.nocookie.net/among-us-wiki/images/4/43/Orange.png" width="32"/>
+    <img src="https://vignette.wikia.nocookie.net/among-us-wiki/images/9/92/Yellow.png" width="32"/>
+    <img src="https://vignette.wikia.nocookie.net/among-us-wiki/images/7/71/Black.png" width="32"/>
+    <img src="https://vignette.wikia.nocookie.net/among-us-wiki/images/8/80/White.png" width="32"/>
+    <img src="https://vignette.wikia.nocookie.net/among-us-wiki/images/3/31/Purple.png" width="32"/>
+    <img src="https://vignette.wikia.nocookie.net/among-us-wiki/images/0/06/Brown.png" width="32"/>
+    <img src="https://vignette.wikia.nocookie.net/among-us-wiki/images/a/ab/Cyan.png" width="32"/>
+    <img src="https://vignette.wikia.nocookie.net/among-us-wiki/images/3/34/Lime.png" width="32"/>
+    <img src="https://vignette.wikia.nocookie.net/among-us-wiki/images/8/87/Tan.png" width="32"/>
+    <img src="https://vignette.wikia.nocookie.net/among-us-wiki/images/2/22/Fortegreen.png" width="32"/>
 </p>
 
 ### Compiling yourself
