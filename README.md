@@ -7,7 +7,15 @@ two people per second. Use this as a last resort, not as a default.
 The bot reacts automatically when someone deafens themselves, waits 5 seconds and deafens
 anyone who is not deafened yet (except dead/spectator people).
 
-To update the game code, just type a new game code in chat, the message will update automatically.
+To update the game code, just type a new game code in chat (capitalize all letters), the message will update automatically.
+
+Detected game codes:
+* :white_check_mark: `AT22T5`
+* :white_check_mark: `   AT22T5    ` (spaces before and/or after the code)
+* :x: `at22t5`
+* :x: `Check out my gamecode: AT22T5`
+* :x: `AT22T5 is the code`
+* :x: `At22T5`
 
 Invite him [here](https://discord.com/api/oauth2/authorize?client_id=759194955272552468&permissions=29715520&scope=bot)
 
@@ -19,7 +27,7 @@ Invite him [here](https://discord.com/api/oauth2/authorize?client_id=75919495527
 | !unmute         |        | Unmute/Undeafen yourself if the bot didn't do that automatically   |
 | !undeafen        |     | Unmute/Undeafen yourself if the bot didn't do that automatically    |
 | !help           |    | Show a help dialog with all these commands                                                        |
-| <code>([A-z]&#124;\d){5}</code> |     |  Create a new game (has to be in Voice channel). Does not mute anyone.  |
+| <code>([A-Z]&#124;\d){6}</code> |     |  Create a new game (has to be in Voice channel). Does not mute anyone.  |
 
 ## Preview
 
