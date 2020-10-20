@@ -40,7 +40,7 @@ class ReactionsMessage(
         }
 
         override fun compareTo(other: AmongUsPlayer): Int {
-            return this.member.effectiveName.compareTo(other.member.effectiveName)
+            return this.member.effectiveName.compareTo(other.member.effectiveName.toLowerCase())
         }
     }
 
